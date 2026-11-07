@@ -1,6 +1,8 @@
 import psycopg2
 import psycopg2.extras
+
 from source.config import DATABASE_URL
+
 
 def get_db():
     conn = psycopg2.connect(DATABASE_URL)

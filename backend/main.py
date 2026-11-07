@@ -1,11 +1,12 @@
 import os
+
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from source.db import init_db
 
 # 1. Добавляем импорт логгера
 from source.logger import setup_logger
 from source.routers import snippets
-from source.db import init_db
 
 # 2. Вызываем настройку логгера ДО создания приложения
 setup_logger()

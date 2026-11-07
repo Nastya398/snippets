@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from typing import List
 import time
-from source.schemas.snippet import SnippetCreate, SnippetResponse
+
+from fastapi import APIRouter, HTTPException
+
 from source import handlers
 from source.db import get_db
+from source.schemas.snippet import SnippetCreate, SnippetResponse
 
 router = APIRouter()
 
@@ -12,7 +13,7 @@ def create(snippet: SnippetCreate):
     """Создать новый сниппет"""
     return handlers.snippets.create_snippet(snippet)
 
-@router.get("/snippets", response_model=List[SnippetResponse], tags=["Snippets"])
+@router.get("/snippets", response_model=list[SnippetResponse], tags=["Snippets"])
 def list_all():
     """Получить список всех сниппетов"""
     return handlers.snippets.get_snippets()
@@ -29,12 +30,11 @@ def get_one(snippet_id: int):
 def metrics():
     """Метрики для DevOps (Размер таблицы, время обработки)"""
     start = time.time()
-    with get_db() as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT pg_total_relation_size('snippets');")
-            size = cur.fetchone()['pg_total_relation_size']
-            cur.execute("SELECT count(*) FROM snippets;")
-            count = cur.fetchone()['count']
+    with get_db() as conn, conn.cursor() as cur:
+        cur.execute("SELECT pg_total_relation_size('snippets');")
+        size = cur.fetchone()['pg_total_relation_size']
+        cur.execute("SELECT count(*) FROM snippets;")
+        count = cur.fetchone()['count']
     return {
         "table_size_bytes": size,
         "snippets_count": count,
