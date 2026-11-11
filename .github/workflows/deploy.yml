@@ -40,5 +40,5 @@ jobs:
             git pull -q
             sed -i '/^APP_TAG=/d' .env
             echo "APP_TAG=$TAG" >> .env
-            docker compose up -d --pull always --wait
+            docker compose up -d --pull always --wait --force-recreate
           EOF
